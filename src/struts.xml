@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="GBK" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+<struts>
+    <constant name="struts.i18n.reload" value="true"></constant>
+    <constant name="struts.i18n.encoding" value="GBK"></constant>
+    <constant name="struts.devMode" value="true"></constant><!-- 开发模式，修改立即被反馈 -->
+    <constant name="struts.objectFactory" value="spring" />
+  <package name="default" extends="struts-default" namespace="/">
+  
+  <interceptors>
+    <interceptor name="checkSession" class="com.zyh.interceptor.SessionCheckInterceptor"></interceptor>
+    <interceptor-stack name="checkLogin">
+       <interceptor-ref name="checkSession"></interceptor-ref>
+       <interceptor-ref name="defaultStack"></interceptor-ref>
+    </interceptor-stack>
+  </interceptors>
+  
+  <global-results>
+     <result name="error">
+      /error.jsp
+     </result>
+     <result name="login">
+      /login.jsp
+     </result>
+  </global-results>
+  
+        <action name="register" class="registerAndLogin" method="register">
+           <result name="register">
+               /register.jsp
+           </result>
+        </action>
+        
+        <action name="login" class="registerAndLogin" method="login">
+            <result name="success" type="redirectAction">
+            <param name="actionName">allCategories</param>
+            <param name="pageNo">1</param>
+            </result>      
+        </action>
+        
+          <action name="exit" class="registerAndLogin" method="exit">
+          </action>
+        
+        <action name="showUser" class="user" method="showUser">
+         <interceptor-ref name="checkLogin"/>
+           <result name="show">
+               /homePage.jsp
+           </result>  
+            <result name="update">
+               /updateUser.jsp
+           </result>  
+        </action>
+        
+        <action name="updateUser" class="user" method="updateUser">
+        <interceptor-ref name="checkLogin"/>
+           <result name="success" type="redirectAction">
+            <param name="actionName">showUser</param>
+             <param name="id">${id}</param>
+            <param name="flag">2</param>
+            </result>      
+        </action>
+        
+        <action name="grantRight" class="user" method="grantRight">
+        <interceptor-ref name="checkLogin"/>
+           <result name="grant" type="redirectAction">
+            <param name="actionName">allMsgs</param>
+             <param name="topicId">${topicId}</param>
+             <param name="pageNo">1</param>
+            </result>      
+        </action>
+        
+        <action name="allCategories" class="category" method="getAllCategories">
+       <interceptor-ref name="checkLogin"/>
+            <result name="success">
+             /categoryList.jsp
+            </result>      
+        </action>
+        
+        <action name="allTopics" class="topic" method="getAllTopics">
+        <interceptor-ref name="checkLogin"/>
+            <result name="success">
+             /city.jsp
+            </result>      
+        </action>
+        
+       <action name="removeTopic" class="topic" method="removeTopic">
+        <interceptor-ref name="checkLogin" />
+            <result name="success" type="redirectAction">
+            <param name="actionName">allTopics</param>
+            <param name="categoryId">${categoryId}</param>
+            <param name="pageNo">1</param>
+            </result>  
+        </action>
+     <action name="lockTopic" class="topic" method="lockTopic">
+        <interceptor-ref name="checkLogin" />
+            <result name="lock" type="redirectAction">
+            <param name="actionName">allTopics</param>
+            <param name="categoryId">${categoryId}</param>
+            <param name="pageNo">1</param>
+            </result>  
+        </action>
+        <action name="unLockTopic" class="topic" method="unLockTopic">
+        <interceptor-ref name="checkLogin" />
+            <result name="unLock" type="redirectAction">
+            <param name="actionName">allTopics</param>
+            <param name="categoryId">${categoryId}</param>
+            <param name="pageNo">1</param>
+            </result>  
+        </action>
+        
+        <action name="addTopic" class="topic" method="addTopic">
+        <interceptor-ref name="checkLogin"/>
+         <result name="success" type="redirectAction">
+            <param name="actionName">allTopics</param>
+            <param name="pageNo">1</param>
+            <param name="categoryId">${categoryId}</param>
+            </result>  
+        </action>
+        
+        <action name="ZDTopic" class="topic" method="ZDTopic">
+        <interceptor-ref name="checkLogin"/>
+         <result name="zd" type="redirectAction">
+            <param name="actionName">allTopics</param>
+            <param name="pageNo">1</param>
+            <param name="categoryId">${categoryId}</param>
+            </result>  
+        </action>
+        
+        <action name="unZDTopic" class="topic" method="unZDTopic">
+        <interceptor-ref name="checkLogin"/>
+         <result name="unZd" type="redirectAction">
+            <param name="actionName">allTopics</param>
+            <param name="pageNo">1</param>
+            <param name="categoryId">${categoryId}</param>
+            </result>  
+        </action>
+        
+        <action name="QZDTopic" class="topic" method="QZDTopic">
+        <interceptor-ref name="checkLogin"/>
+         <result name="qzd" type="redirectAction">
+            <param name="actionName">allTopics</param>
+            <param name="pageNo">1</param>
+            <param name="categoryId">${categoryId}</param>
+            </result>  
+        </action>
+        
+        <action name="unQZDTopic" class="topic" method="unQZDTopic">
+        <interceptor-ref name="checkLogin"/>
+         <result name="unQzd" type="redirectAction">
+            <param name="actionName">allTopics</param>
+            <param name="pageNo">1</param>
+            <param name="categoryId">${categoryId}</param>
+            </result>  
+        </action>
+        
+        <action name="allMsgs" class="msg" method="getAllMsgs">
+       <interceptor-ref name="checkLogin"/>
+            <result name="success">
+             /topic.jsp
+            </result>      
+        </action>
+         <action name="removeMsg" class="msg" method="removeMsg">
+        <interceptor-ref name="checkLogin" />
+            <result name="success" type="redirectAction">
+            <param name="actionName">allMsgs</param>
+            <param name="topicId">${topicId}</param>
+            <param name="pageNo">1</param>
+            </result>  
+        </action>
+        
+         <action name="addMsg" class="msg" method="addMsg">
+         <interceptor-ref name="checkLogin"/>
+         <result name="success" type="redirectAction">
+            <param name="actionName">allMsgs</param>
+            <param name="pageNo">1</param>
+            <param name="topicId">${topicId}</param>
+            </result>  
+        </action>
+      </package>
+      
+      <package name="admin" extends="struts-default" namespace="/admin">
+     
+     <interceptors>
+    <interceptor name="checkSession" class="com.zyh.interceptor.SessionCheckInterceptor"></interceptor>
+    <interceptor name="userController" class="com.zyh.interceptor.UserCRUDInterceptor"></interceptor>
+    <interceptor name="categoryController" class="com.zyh.interceptor.CategoryCRUDInterceptor"></interceptor>
+    <interceptor-stack name="checkAdmin">
+       <interceptor-ref name="checkSession"></interceptor-ref>
+       <interceptor-ref name="userController"></interceptor-ref>
+       <interceptor-ref name="defaultStack"></interceptor-ref>
+    </interceptor-stack>
+    <interceptor-stack name="checkMonitor">
+       <interceptor-ref name="checkSession"></interceptor-ref>
+       <interceptor-ref name="categoryController"></interceptor-ref>
+       <interceptor-ref name="defaultStack"></interceptor-ref>
+    </interceptor-stack>
+    <interceptor-stack name="checkLogin">
+       <interceptor-ref name="checkSession"></interceptor-ref>
+       <interceptor-ref name="defaultStack"></interceptor-ref>
+    </interceptor-stack>
+  </interceptors>
+  
+  <global-results>
+     <result name="error">
+      /error.jsp
+     </result>
+     <result name="login">
+      /admin/adminLogin.jsp
+     </result>
+  </global-results>
+  
+     <action name="userList" class="user" method="showAllUsers">
+         <interceptor-ref name="checkMonitor"/>
+         <result name="userAdmin">
+            ./userAdmin.jsp
+            </result> 
+            <result name="monitorAdmin">
+            ./monitorAdmin.jsp
+            </result>
+        </action>
+        
+  
+       <action name="adminLogin" class="registerAndLogin" method="adminLogin">
+            <result name="admin" type="redirectAction">
+            <param name="actionName">categoryList</param>
+            <param name="pageNo">1</param>
+            </result>  
+        </action>
+        
+        <action name="removeUser" class="user" method="removeUser">
+        <interceptor-ref name="checkAdmin" />
+            <result name="remove" type="redirectAction">
+            <param name="actionName">userList</param>
+             <param name="groupId">${groupId}</param>
+            <param name="pageNo">1</param>
+            </result>  
+        </action>
+        
+        <action name="demoteUser" class="user" method="demoteUser">
+        <interceptor-ref name="checkMonitor" />
+            <result name="demote" type="redirectAction">
+            <param name="actionName">userList</param>
+             <param name="groupId">${groupId}</param>
+            <param name="pageNo">1</param>
+            </result>  
+        </action>
+        
+         <action name="lockUser" class="user" method="lockUser">
+        <interceptor-ref name="checkMonitor" />
+            <result name="lock" type="redirectAction">
+            <param name="actionName">userList</param>
+             <param name="groupId">${groupId}</param>
+            <param name="pageNo">1</param>
+            </result>  
+        </action>
+        
+         <action name="unLockUser" class="user" method="unLockUser">
+        <interceptor-ref name="checkMonitor" />
+            <result name="unLock" type="redirectAction">
+            <param name="actionName">userList</param>
+             <param name="groupId">${groupId}</param>
+            <param name="pageNo">1</param>
+            </result>  
+        </action>
+        
+       <action name="categoryList" class="category" method="getAllCategories">
+         <interceptor-ref name="checkMonitor"/>
+         <result name="success">
+            ./categoryAdmin.jsp
+            </result>  
+        </action>
+        
+       <action name="lockCategory" class="category" method="lockCategory">
+        <interceptor-ref name="checkMonitor" />
+            <result name="lock" type="redirectAction">
+            <param name="actionName">categoryList</param>
+            <param name="pageNo">1</param>
+            </result>  
+        </action>
+        
+         <action name="unLockCategory" class="category" method="unLockCategory">
+        <interceptor-ref name="checkMonitor" />
+            <result name="unLock" type="redirectAction">
+            <param name="actionName">categoryList</param>
+            <param name="pageNo">1</param>
+            </result>  
+        </action>
+        
+        <action name="removeCategory" class="category" method="removeCategory">
+        <interceptor-ref name="checkMonitor" />
+            <result name="success" type="redirectAction">
+            <param name="actionName">categoryList</param>
+            <param name="pageNo">1</param>
+            </result>  
+        </action>
+        
+       </package>
+        
+      
+       <!--  <action name="validate" class="com.action.Validate" method="login">
+        <result name="success">
+                /index.jsp
+            </result> 
+            <result name="input">
+                /validate.jsp
+            </result> 
+        <interceptor-ref name="defaultStack"></interceptor-ref>
+        </action>
+        <action name="requiredstring" class="com.action.Requiredstring">
+        <result name="success">
+        /index.jsp
+        </result>
+        <result name="input">
+        /login.jsp
+        </result>
+         <interceptor-ref name="defaultStack"></interceptor-ref>
+        </action> -->
+   
+   
+</struts>

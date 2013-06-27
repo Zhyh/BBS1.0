@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<welcome-file-list>
+	  <welcome-file>
+	  ./login.jsp
+	  </welcome-file>
+	</welcome-file-list>
+	<!--解决Hibernate延迟加载出现的问题，需要放到struts2过滤器之前-->  
+    <filter>  
+        <filter-name>lazyLoadingFilter</filter-name>  
+        <filter-class>  
+            org.springframework.orm.hibernate4.support.OpenSessionInViewFilter
+        </filter-class>
+           <!-- singleSession默认设置为true，如何为false就等于没有设置OpenSessionInView -->
+       <init-param>
+           <param-name>singleSession</param-name>
+           <param-value>true</param-value>
+       </init-param>
+     </filter> 
+	
+  <filter>
+    <!-- 用来指定struts的核心控制器FilterDispatcher -->
+    <filter-name>struts2</filter-name>
+        <filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+    </filter>
+ <filter-mapping>
+ <!-- 用来指定让Struts框架来处理用户的那些请求（URL） /*表示处理所有请求 -->
+        <filter-name>struts2</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+  
+   <!--设置一起动当前的Web应用，就加载Spring，让Spring管理Bean-->  
+   
+<listener>  
+    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>  
+</listener>  
+
+    <!--定义Spring的配置的位置，可以定义多个配置文件，可以使用通配符。  -->  
+   <context-param>  
+    <param-name>contextConfigLocation</param-name> 
+     <!-- <param-value>/WEB-INF/applicationContext-*.xml,classpath*:applicationContext-*.xml</param-value>
+        --> 
+    <param-value>  
+        classpath:beans-conf.xml  
+        </param-value>  
+</context-param> 
+</web-app>
